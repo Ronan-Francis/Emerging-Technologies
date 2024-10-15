@@ -7,15 +7,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="chat-container">
         <h1>Welcome to the ELIZA Chatbot</h1>
-        <div id="chat-window">
+        <div id="chat-box" class="chat-box">
             <div id="conversation"></div>
         </div>
-        <div id="input-section">
-            <input type="text" id="user-input" placeholder="Type your message here..." />
-            <button onclick="getResponse()">Send</button>
-        </div>
+        <input type="text" id="user-input" placeholder="Type your message here...">
+        <button id="send-btn">Send</button>
     </div>
 
     <script src="eliza.js"></script>
