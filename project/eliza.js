@@ -120,39 +120,69 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Initialize a variable to track the number of responses
   let responseCount = 0;
+  let lastResponse = '';
 
   // Implement a function to select an appropriate response based on user input
   function getResponse(userInput) {
-    let response = '';
-    let foundKeyword = false;
-
-    // Determine if random responses should be used based on the response count
     const useRandom = responseCount > 5 || Math.random() < 0.5;
+    let response = '';
+    let foundKeywords = [];
 
+    // Function to log debug messages if debug mode is enabled
+    function debugLog(message) {
+      const debugMode = document.getElementById('debugMode').checked;
+      if (debugMode) {
+        console.log(message);
+      }
+    }
+
+    debugLog(`User input: ${userInput}`);
+    debugLog(`Use random: ${useRandom}`);
+
+    // Collect all matching keywords and their responses
     for (const keyword in keywordResponses) {
       if (userInput.toLowerCase().includes(keyword)) {
         const responses = keywordResponses[keyword];
         if (!useRandom) {
-          response = responses[0][0]; // Use the first response in the list
+          foundKeywords.push({ response: responses[0][0], rank: responses[0][1] });
         } else {
-          response = responses[Math.floor(Math.random() * responses.length)][0];
+          const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+          foundKeywords.push({ response: randomResponse[0], rank: randomResponse[1] });
         }
-        foundKeyword = true;
-        break;
+        debugLog(`Found keyword: ${keyword}, responses: ${JSON.stringify(responses)}`);
       }
     }
 
-    if (!foundKeyword) {
+    if (foundKeywords.length > 0) {
+      // Sort by rank in descending order
+      foundKeywords.sort((a, b) => b.rank - a.rank);
+      debugLog(`Sorted found keywords: ${JSON.stringify(foundKeywords)}`);
+
+      // Check if the top responses have the same rank
+      const topRank = foundKeywords[0].rank;
+      const topResponses = foundKeywords.filter(item => item.rank === topRank);
+      debugLog(`Top responses with rank ${topRank}: ${JSON.stringify(topResponses)}`);
+
+      // Choose randomly among the top-ranked responses if there are multiple
+      response = topResponses[Math.floor(Math.random() * topResponses.length)].response;
+    } else {
+      // No keyword found, use default responses
       if (!useRandom) {
         response = defaultResponses[0][0]; // Use the first response in the list
       } else {
-        response = defaultResponses[Math.floor(Math.random() * defaultResponses.length)][0];
+        do {
+          response = defaultResponses[Math.floor(Math.random() * defaultResponses.length)][0];
+        } while (response === lastResponse && defaultResponses.length > 1);
       }
     }
 
     // Increment the response count
     responseCount++;
 
+    // Update the last response
+    lastResponse = response;
+
+    debugLog(`Selected response: ${response}`);
     return response;
   }
 
