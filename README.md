@@ -15,7 +15,6 @@ This project contains two main components: a trigram-based language model in Pyt
    - Constructed a dictionary-based trigram model.
    - Each three-character sequence (trigram) is a key, with its frequency in the text as the value. This data structure allowed efficient storage and retrieval of trigram counts.
 
----
 
 ### Task 2: Text Generation Using the Trigram Model
 1. **Seed Selection**: 
@@ -25,7 +24,6 @@ This project contains two main components: a trigram-based language model in Pyt
    - For each new character, used the last two characters as a lookup in the trigram model.
    - Implemented a weighted random selection of the next character based on trigram counts, ensuring realistic text flow.
 
----
 
 ### Task 3: Model Analysis with English Word Matching
 1. **Word List Matching**:
@@ -34,7 +32,6 @@ This project contains two main components: a trigram-based language model in Pyt
 2. **Percentage Calculation**:
    - Tokenized the generated text and calculated the percentage of tokens that matched words in the English list to evaluate the model’s accuracy in generating recognizable words.
 
----
 
 ### Task 4: Model Export as JSON
 1. **Export Process**:
