@@ -41,14 +41,46 @@ This project contains two main components: a trigram-based language model in Pyt
 
 ## Project (40%) - ELIZA Chatbot
 
-### ELIZA Chatbot Interface and Logic
-- **Interface**: Built with HTML and CSS in the `eliza` directory, featuring a simple user input box and display for conversation history.
-- **JavaScript Logic**: Implemented in `eliza.js`, handling basic ELIZA responses with regular expression-based pattern matching.
+### Project Structure
 
-### Deployment
-- **GitHub Pages**: Configured GitHub Actions to deploy the chatbot automatically on the main branch. 
+- `index.html`: The main HTML structure and interface for user interaction.
+- `style.css`: Basic styling for a clean and simple chatbot interface.
+- `eliza.js`: JavaScript logic for processing user input and generating responses based on keywords.
 
-Visit the chatbot on GitHub Pages [here](your-link).
+---
+
+### Development Process
+
+#### 1. HTML Structure (`index.html`)
+- **Interface Design**: Created an HTML layout with an input field for user text, a display area for conversation history, and a "Send" button to submit messages.
+- **Debug Mode**: Added a checkbox for enabling debug mode to help view JavaScript logs during testing.
+
+#### 2. Styling (`style.css`)
+- **Styling**: Defined a minimalistic, clean look for the chatbot window, including padding, borders, and layout.
+- **Message Alignment**: Customized alignment for user messages (right-aligned) and ELIZA's responses (left-aligned) for clarity.
+
+#### 3. Chatbot Logic (`eliza.js`)
+- **Event Listeners**: Added a listener for the "Send" button, capturing user input when clicked.
+- **Response Logic**: 
+  - Implemented keyword-based responses, with specific responses for terms like "sad," "happy," "angry," and "anxious."
+  - If no keyword is detected, the bot selects a general response from a default set.
+  - Weighted responses for repeated interactions to ensure variability and simulate human-like responses.
+
+#### 4. Deployment
+- **GitHub Pages**: Set up GitHub Actions for automatic deployment to GitHub Pages.
+
+### Usage
+
+Visit the ELIZA chatbot [here](your-link). Type a message and click "Send" to interact with ELIZA.
+
+### Future Enhancements
+
+- **Advanced Response Matching**: Potential improvements to keyword matching for more dynamic conversations.
+- **User Emotion Tracking**: Expanding response logic to consider the conversation's emotional context.
+
+---
+
+This chatbot offers an interactive and approachable simulation of the original ELIZA, with a lightweight and responsive interface.
 
 ---
 
