@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const inputField = document.getElementById('user-input');
   const displayArea = document.getElementById('conversation');
   const submitButton = document.getElementById('send-btn');
+  const debugModeCheckbox = document.getElementById('debugMode');
 
   // 3. Define the Eliza responses
   // Create a list of possible responses
@@ -35,9 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
     'happy': [
       ['That is great to hear! What makes you feel happy?', 1],
       ['Can you share more about your happiness?', 2],
-      ['What do you enjoy the most about this?', 3],
-      ['How often do you feel this way?', 4],
-      ['Is there something specific that triggered your happiness?', 5]
+      ['What usually makes you feel happy?', 3],
+      ['How long have you been feeling happy?', 4],
+      ['Is there something specific that made you happy recently?', 5]
     ],
     'angry': [
       ['Why do you feel angry?', 1],
@@ -124,66 +125,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Implement a function to select an appropriate response based on user input
   function getResponse(userInput) {
-    const useRandom = responseCount > 5 || Math.random() < 0.5;
-    let response = '';
-    let foundKeywords = [];
-
-    // Function to log debug messages if debug mode is enabled
-    function debugLog(message) {
-      const debugMode = document.getElementById('debugMode').checked;
-      if (debugMode) {
-        console.log(message);
+    const words = userInput.toLowerCase().split(' ');
+    for (let word of words) {
+      if (keywordResponses[word]) {
+        const responses = keywordResponses[word];
+        return responses[Math.floor(Math.random() * responses.length)][0];
       }
     }
+    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)][0];
+  }
 
-    debugLog(`User input: ${userInput}`);
-    debugLog(`Use random: ${useRandom}`);
-
-    // Collect all matching keywords and their responses
-    for (const keyword in keywordResponses) {
-      if (userInput.toLowerCase().includes(keyword)) {
-        const responses = keywordResponses[keyword];
-        if (!useRandom) {
-          foundKeywords.push({ response: responses[0][0], rank: responses[0][1] });
-        } else {
-          const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-          foundKeywords.push({ response: randomResponse[0], rank: randomResponse[1] });
-        }
-        debugLog(`Found keyword: ${keyword}, responses: ${JSON.stringify(responses)}`);
-      }
-    }
-
-    if (foundKeywords.length > 0) {
-      // Sort by rank in descending order
-      foundKeywords.sort((a, b) => b.rank - a.rank);
-      debugLog(`Sorted found keywords: ${JSON.stringify(foundKeywords)}`);
-
-      // Check if the top responses have the same rank
-      const topRank = foundKeywords[0].rank;
-      const topResponses = foundKeywords.filter(item => item.rank === topRank);
-      debugLog(`Top responses with rank ${topRank}: ${JSON.stringify(topResponses)}`);
-
-      // Choose randomly among the top-ranked responses if there are multiple
-      response = topResponses[Math.floor(Math.random() * topResponses.length)].response;
-    } else {
-      // No keyword found, use default responses
-      if (!useRandom) {
-        response = defaultResponses[0][0]; // Use the first response in the list
-      } else {
-        do {
-          response = defaultResponses[Math.floor(Math.random() * defaultResponses.length)][0];
-        } while (response === lastResponse && defaultResponses.length > 1);
-      }
-    }
-
-    // Increment the response count
-    responseCount++;
-
-    // Update the last response
-    lastResponse = response;
-
-    debugLog(`Selected response: ${response}`);
-    return response;
+  function displayMessage(message, sender) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-message', sender === 'user' ? 'user-message' : 'eliza-message');
+    messageElement.textContent = message;
+    displayArea.appendChild(messageElement);
+    displayArea.scrollTop = displayArea.scrollHeight;
   }
 
   // Function to display a greeting message from Eliza
@@ -201,27 +158,22 @@ document.addEventListener('DOMContentLoaded', function () {
   // 4. Handle user input
   // Add an event listener to the submit button
   submitButton.addEventListener('click', function () {
-    // Capture the user input when the button is clicked
-    const userInput = inputField.value;
+    const userInput = inputField.value.trim();
+    if (userInput) {
+      displayMessage(userInput, 'user');
+      const response = getResponse(userInput);
+      displayMessage(response, 'eliza');
+      inputField.value = '';
+      if (debugModeCheckbox.checked) {
+        console.log(`User Input: ${userInput}`);
+        console.log(`ELIZA Response: ${response}`);
+      }
+    }
+  });
 
-    // Display the user input in the conversation area
-    const userMessage = document.createElement('div');
-    userMessage.className = 'user-message';
-    userMessage.textContent = userInput;
-    displayArea.appendChild(userMessage);
-
-    // 5. Generate and display Eliza's response
-    // Use the function to select a response based on the user input
-    const elizaResponse = getResponse(userInput);
-
-    // Display Eliza's response in the conversation area
-    const elizaMessage = document.createElement('div');
-    elizaMessage.className = 'eliza-message';
-    elizaMessage.textContent = elizaResponse;
-    displayArea.appendChild(elizaMessage);
-
-    // 6. Clear the input field
-    // After displaying the response, clear the input field for the next user input
-    inputField.value = '';
+  inputField.addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+      submitButton.click();
+    }
   });
 });

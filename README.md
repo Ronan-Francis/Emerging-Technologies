@@ -30,7 +30,10 @@ This project contains two main components: a trigram-based language model in Pyt
    - Loaded an English word list from `words.txt` to compare against the generated 10,000-character text.
 
 2. **Percentage Calculation**:
-   - Tokenized the generated text and calculated the percentage of tokens that matched words in the English list to evaluate the model’s accuracy in generating recognizable words.
+- Tokenized the generated text and computed the percentage of "words", or spaces between groups of generated characters, that matched words in the English word list to assess the model's accuracy in producing recognizable words.
+
+3. **Testing with Threads**:
+    - Created multiple threads to test the model and calculate the average percentage of recognizable words. 
 
 
 ### Task 4: Model Export as JSON
@@ -39,7 +42,7 @@ This project contains two main components: a trigram-based language model in Pyt
 
 ---
 
-## Project (40%) - ELIZA Chatbot
+## ELIZA Chatbot  - `/project`
 
 ### Project Structure
 
