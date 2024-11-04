@@ -1,96 +1,51 @@
-# Trigram Language Model and ELIZA Chatbot Project
 
-This project contains two main components: a trigram-based language model in Python (in `trigrams.ipynb`) and a client-side ELIZA chatbot, deployed to GitHub Pages.
+# README
 
----
-
-## Trigram Language Model Tasks - `trigrams.ipynb`
-
-### Task 1: Third-Order Letter Approximation Model
-1. **Data Preparation**: 
-   - Collected five plain-text English books from Project Gutenberg.
-   - Removed non-essential content, including preambles and postambles, keeping only uppercase ASCII letters, spaces, and periods for consistent formatting.
-
-2. **Trigram Model Creation**:
-   - Constructed a dictionary-based trigram model.
-   - Each three-character sequence (trigram) is a key, with its frequency in the text as the value. This data structure allowed efficient storage and retrieval of trigram counts.
-
-
-### Task 2: Text Generation Using the Trigram Model
-1. **Seed Selection**: 
-   - Started the text with "TH" to initiate the generation process.
-   
-2. **Character-by-Character Generation**:
-   - For each new character, used the last two characters as a lookup in the trigram model.
-   - Implemented a weighted random selection of the next character based on trigram counts, ensuring realistic text flow.
-
-
-### Task 3: Model Analysis with English Word Matching
-1. **Word List Matching**:
-   - Loaded an English word list from `words.txt` to compare against the generated 10,000-character text.
-
-2. **Percentage Calculation**:
-- Tokenized the generated text and computed the percentage of "words", or spaces between groups of generated characters, that matched words in the English word list to assess the model's accuracy in producing recognizable words.
-
-3. **Testing with Threads**:
-    - Created multiple threads to test the model and calculate the average percentage of recognizable words. 
-
-
-### Task 4: Model Export as JSON
-1. **Export Process**:
-   - Saved the trigram model as `trigrams.json` using Python’s `json` library for easy reuse and analysis.
+## Overview
+This repository contains:
+1. **Eliza Chatbot**: A web-based, interactive chatbot.
+2. **Trigram Language Model**: A notebook for trigram text analysis and generation.
 
 ---
 
-## ELIZA Chatbot  - `/project`
+### **Eliza Chatbot**
 
-### Project Structure
-
-- `index.html`: The main HTML structure and interface for user interaction.
-- `style.css`: Basic styling for a clean and simple chatbot interface.
-- `eliza.js`: JavaScript logic for processing user input and generating responses based on keywords.
-
----
-
-### Development Process
-
-#### 1. HTML Structure (`index.html`)
-- **Interface Design**: Created an HTML layout with an input field for user text, a display area for conversation history, and a "Send" button to submit messages.
-- **Debug Mode**: Added a checkbox for enabling debug mode to help view JavaScript logs during testing.
-
-#### 2. Styling (`style.css`)
-- **Styling**: Defined a minimalistic, clean look for the chatbot window, including padding, borders, and layout.
-- **Message Alignment**: Customized alignment for user messages (right-aligned) and ELIZA's responses (left-aligned) for clarity.
-
-#### 3. Chatbot Logic (`eliza.js`)
-- **Event Listeners**: Added a listener for the "Send" button, capturing user input when clicked.
-- **Response Logic**: 
-  - Implemented keyword-based responses, with specific responses for terms like "sad," "happy," "angry," and "anxious."
-  - If no keyword is detected, the bot selects a general response from a default set.
-  - Weighted responses for repeated interactions to ensure variability and simulate human-like responses.
-
-#### 4. Deployment
-- **GitHub Pages**: Set up GitHub Actions for automatic deployment to GitHub Pages.
-
-### Usage
-
-Visit the ELIZA chatbot [here](your-link). Type a message and click "Send" to interact with ELIZA.
-
-### Future Enhancements
-
-- **Advanced Response Matching**: Potential improvements to keyword matching for more dynamic conversations.
-- **User Emotion Tracking**: Expanding response logic to consider the conversation's emotional context.
+#### Design Choices:
+- **HTML**: A central chat container provides a clear interface, enhancing usability.
+- **JavaScript**:
+  - Event listeners for button clicks and `Enter` key.
+  - Keyword-based and default responses for context handling.
+  - **Randomized Default Responses:** Randomly selecting default replies prevents conversations from feeling repetitive, maintaining user engagement.
+  - **Debug Mode:** This feature aids developers in testing and improving the chatbot logic by logging input and output, ensuring easier troubleshooting and refinement.
+- **CSS**: focuses on readability and clear message alignment to distinguish user input from the chatbot's responses.
 
 ---
 
-This chatbot offers an interactive and approachable simulation of the original ELIZA, with a lightweight and responsive interface.
+###**Trigram Language Model Analysis (40%)**
 
----
+#### Task Breakdown and Reasoning:
 
-## Repository Structure
-- `trigrams.ipynb`: Notebook containing all language model tasks.
-- `eliza/`: Directory for the ELIZA chatbot with HTML, CSS, and JavaScript files.
-- `trigrams.json`: JSON export of the trigram model.
-- `README.md`: Project documentation.
+**Task 1: Third-Order Letter Approximation Model**
+- **Choice of Corpus**: Five English texts that provide a source of natural language, ensuring that the model captures varied language patterns.
+- **Text Sanitization**:
+  - **Uppercase Conversion**: Standardizing all text to uppercase simplifies pattern recognition.
+  - **Character Filtering**: Retaining only ASCII letters, full stops, and spaces focusing the model on essential elements.
+- **Trigram Data Structure**:
+  - **Custom Design**: `defaultdict` streamlines the code, reducng the need for condition checks.
+
+**Task 2: Trigram-Based Text Generation**
+- **Weighted Random Selection**:
+  - **Rationale**: Using counts as weights to pick the next character makes the text generation probabilistic yet context-aware, imitating natural language use where more frequent sequences appear more often.
+  - **Implementation without External Libraries**: This showcases an understanding of weighted random selection and probability distribution in pure Python.
+
+**Task 3: Model Analysis**
+- **Validation Against `words.txt`**:
+  - **Validation**: Compared generated text against words.txt for quality assessment.
+  - **Regex Extraction**: Used re.findall() for better word handling.
+
+**Task 4: Model Export**
+- **JSON Format**:
+  - **Choice**: Sotred the decimals of the percentage for easy of use with `random.choices()`
+  - **Repository Storage**: Ensures reproducibility and future use.
 
 ---
