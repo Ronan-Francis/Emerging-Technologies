@@ -21,7 +21,7 @@ This repository contains:
 
 ---
 
-###**Trigram Language Model Analysis (40%)**
+### **Trigram Language Model Analysis (40%)**
 
 #### Task Breakdown and Reasoning:
 
