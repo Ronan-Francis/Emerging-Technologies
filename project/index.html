@@ -14,13 +14,25 @@
         <div id="chat-box" class="chat-box">
             <div id="conversation"></div>
         </div>
-        <input type="text" id="user-input" placeholder="Type your message here...">
-        <button id="send-btn">Send</button>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message here..." required>
+            <button id="send-btn" disabled>Send</button>
+        </div>
+        <div class="settings-container">
+            <label for="debugMode">Enable Debug Mode</label>
+            <input type="checkbox" id="debugMode">
+        </div>
     </div>
-    <label for="debugMode">Enable Debug Mode</label>
-    <input type="checkbox" id="debugMode">
 
-    <script src="eliza.js"></script>
+    <script>
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-btn');
+
+        userInput.addEventListener('input', () => {
+            sendButton.disabled = !userInput.value.trim();
+        });
+    </script>
+    <script src="eliza.js" defer></script>
 </body>
 
 </html>
