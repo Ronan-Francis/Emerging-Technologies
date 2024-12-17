@@ -11,10 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const debugModeCheckbox = document.getElementById('debugMode');
 
   const responses = {
-    'hello|hi|hey': [
-      "Hello! How are you feeling today?",
-      "Hi there! What’s on your mind?",
-      "Hey! How can I help you?"
+    'hey|hi|hello': [
+      "Hey! How can I help you?",
+      "Hi there! What’s on your mind?"
     ],
     'you remind me of (.*)': [
       "Why do you think I remind you of $1?",
@@ -26,19 +25,19 @@ document.addEventListener('DOMContentLoaded', function () {
       "How does that make you feel about your family?",
       "What role does your family play in your thoughts?"
     ],
-    '(.*) I need (.*)': [
-      "Why do you need $2?",
-      "Would getting $2 really help you?",
-      "What if you didn’t need $2?"
+    'I need (.*)': [
+      "Why do you need $1?",
+      "Would getting $1 really help you?",
+      "What if you didn’t need $1?"
     ],
-    '(.*) I am (.*)': [
-      "Why do you think you are $2?",
+    'I am (.*)': [
+      "Why do you think you are $1?",
       "How long have you felt that way?",
-      "What made you feel like $2?"
+      "What made you feel like $1?"
     ],
-    '(.*) I feel (.*)': [
-      "Why do you feel $2?",
-      "Does feeling $2 happen often?",
+    'I feel (.*)': [
+      "Why do you feel $1?",
+      "Does feeling $1 happen often?",
       "How does that feeling affect you?"
     ],
     '(.*) (sorry|apologize)(.*)': [
