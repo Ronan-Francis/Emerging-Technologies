@@ -1,19 +1,16 @@
-//1. Create the HTML structure
+// Initialize the JavaScript
 
-// 2. Initialize the JavaScript
 document.addEventListener('DOMContentLoaded', function () {
-  // Wait for the DOM to be fully loaded
-
-  // Select the necessary HTML elements (input field, display area, submit button)
   const inputField = document.getElementById('user-input');
   const displayArea = document.getElementById('conversation');
   const submitButton = document.getElementById('send-btn');
   const debugModeCheckbox = document.getElementById('debugMode');
 
   const responses = {
-    'hey|hi|hello': [
-      "Hey! How can I help you?",
-      "Hi there! What’s on your mind?"
+    'hello|hi|hey': [
+      "Hello! How are you feeling today?",
+      "Hi there! What’s on your mind?",
+      "Hey! How can I help you?"
     ],
     'you remind me of (.*)': [
       "Why do you think I remind you of $1?",
@@ -59,6 +56,25 @@ document.addEventListener('DOMContentLoaded', function () {
     ]
   };
 
+  const reflections = {
+    "i": "you",
+    "me": "you",
+    "my": "your",
+    "am": "are",
+    "you": "I",
+    "your": "my",
+    "yours": "mine",
+    "are": "am"
+  };
+
+  function reflect(word) {
+    return reflections[word.toLowerCase()] || word;
+  }
+
+  function applyReflection(sentence) {
+    return sentence.split(" ").map(reflect).join(" ");
+  }
+
   const compiledPatterns = Object.keys(responses).map(pattern => {
     return { regex: new RegExp(pattern, 'i'), responses: responses[pattern] };
   });
@@ -67,8 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
     for (let { regex, responses } of compiledPatterns) {
       const match = regex.exec(userInput);
       if (match) {
-        const response = responses[Math.floor(Math.random() * responses.length)];
-        return response.replace(/\$(\d+)/g, (_, group) => match[group] || '');
+        const responseTemplate = responses[Math.floor(Math.random() * responses.length)];
+        const response = responseTemplate.replace(/\$(\d+)/g, (_, group) => applyReflection(match[group] || ''));
+        return response;
       }
     }
     return "I'm not sure I understand. Can you elaborate?";
@@ -98,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
       inputField.value = '';
       if (debugModeCheckbox.checked) {
         console.log(`[DEBUG] User Input: ${userInput}`);
+        console.log(`[DEBUG] Reflected Input: ${applyReflection(userInput)}`);
         console.log(`[DEBUG] ELIZA Response: ${response}`);
       }
     }
