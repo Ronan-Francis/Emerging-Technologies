@@ -1,11 +1,22 @@
-// Initialize the JavaScript
-
 document.addEventListener('DOMContentLoaded', function () {
   const inputField = document.getElementById('user-input');
   const displayArea = document.getElementById('conversation');
   const submitButton = document.getElementById('send-btn');
   const debugModeCheckbox = document.getElementById('debugMode');
 
+  // Reflection map
+  const reflections = {
+    "i": "you",
+    "me": "you",
+    "my": "your",
+    "am": "are",
+    "you": "I",
+    "your": "my",
+    "yours": "mine",
+    "are": "am"
+  };
+
+  // Pattern-based responses
   const responses = {
     'hello|hi|hey': [
       "Hello! How are you feeling today?",
@@ -37,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
       "Does feeling $1 happen often?",
       "How does that feeling affect you?"
     ],
-    '(.*) (sorry|apologize)(.*)': [
+    '(.*)(sorry|apologize)(.*)': [
       "No need to apologize.",
       "Apologies aren't necessary. Why do you feel that way?",
       "It’s okay to feel that way."
@@ -56,16 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
     ]
   };
 
-  const reflections = {
-    "i": "you",
-    "me": "you",
-    "my": "your",
-    "am": "are",
-    "you": "I",
-    "your": "my",
-    "yours": "mine",
-    "are": "am"
-  };
+  // Compile regex patterns
+  const compiledPatterns = Object.keys(responses).map(pattern => {
+    return { regex: new RegExp(pattern, 'i'), responses: responses[pattern] };
+  });
 
   function reflect(word) {
     return reflections[word.toLowerCase()] || word;
@@ -75,16 +80,14 @@ document.addEventListener('DOMContentLoaded', function () {
     return sentence.split(" ").map(reflect).join(" ");
   }
 
-  const compiledPatterns = Object.keys(responses).map(pattern => {
-    return { regex: new RegExp(pattern, 'i'), responses: responses[pattern] };
-  });
-
   function getResponse(userInput) {
     for (let { regex, responses } of compiledPatterns) {
       const match = regex.exec(userInput);
       if (match) {
         const responseTemplate = responses[Math.floor(Math.random() * responses.length)];
-        const response = responseTemplate.replace(/\$(\d+)/g, (_, group) => applyReflection(match[group] || ''));
+        const response = responseTemplate.replace(/\$(\d+)/g, (_, group) => {
+          return applyReflection(match[group] || '');
+        });
         return response;
       }
     }
